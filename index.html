@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CartShare — One list. Everyone in it.</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg: #FBF7EE;
+  --bg-alt: #F1E8D2;
+  --card: #FFFFFF;
+  --sidebar: #1E2E28;
+  --sidebar-2: #12211B;
+  --accent: #FF6B4A;
+  --accent-dark: #E14F2E;
+  --accent-2: #F2B705;
+  --accent-2-dark: #D69B00;
+  --sage: #6E9C7D;
+  --sage-dark: #4F7E5F;
+  --text: #21302B;
+  --muted: #857A63;
+  --border: #E8DCC0;
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  margin:0;
+}
+
+h1,h2,h3,h4,h5{
+  font-family: 'Fraunces', 'Inter', serif;
+}
+.brand-text{
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+}
+
+/* ---------- Brand ---------- */
+.brand-mark{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+}
+.brand-icon{
+  width:38px;height:38px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  box-shadow: 0 4px 10px rgba(255,107,74,.28);
+}
+.brand-text{
+  font-size:1.3rem;
+  letter-spacing:-0.01em;
+}
+
+/* ---------- Buttons ---------- */
+.btn-brand{
+  background: var(--accent);
+  border-color: var(--accent);
+  color:#fff;
+  font-weight:600;
+  border-radius: var(--radius-sm);
+  transition: transform .12s ease, background .2s ease, box-shadow .2s ease;
+}
+.btn-brand:hover{
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color:#fff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(225,79,46,.25);
+}
+.btn-brand:active{ transform: translateY(0); }
+
+.btn-outline-brand{
+  border: 2px solid var(--sage);
+  color: var(--sage-dark);
+  font-weight:600;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  transition: all .15s ease;
+}
+.btn-outline-brand:hover{
+  background: var(--sage);
+  color:#fff;
+}
+
+.btn-ghost{
+  background: rgba(255,255,255,.12);
+  color:#fff;
+  border:none;
+  border-radius: 8px;
+}
+.btn-ghost:hover{ background: rgba(255,255,255,.22); color:#fff; }
+
+.btn-icon{
+  background:transparent;
+  border:none;
+  color: var(--text);
+}
+
+/* ---------- Ambient animated background ---------- */
+.ambient-bg{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+.ambient-bg span{
+  position:absolute;
+  border-radius:50%;
+  filter: blur(70px);
+  opacity:.32;
+  animation: float 24s ease-in-out infinite;
+}
+.ambient-bg span:nth-child(1){
+  width:420px;height:420px;
+  background: var(--accent);
+  top:-140px; left:-120px;
+  animation-duration: 26s;
+}
+.ambient-bg span:nth-child(2){
+  width:380px;height:380px;
+  background: var(--accent-2);
+  bottom:-160px; right:-100px;
+  animation-duration: 32s;
+  animation-delay: -6s;
+}
+.ambient-bg span:nth-child(3){
+  width:300px;height:300px;
+  background: var(--sage);
+  top:38%; right:8%;
+  animation-duration: 22s;
+  animation-delay: -12s;
+}
+@keyframes float{
+  0%,100%{ transform: translate(0,0) scale(1); }
+  50%{ transform: translate(36px,-42px) scale(1.08); }
+}
+
+/* ---------- Auth screens ---------- */
+.auth-screen{
+  min-height:100vh;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.auth-wrap, .room-wrap{
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+.auth-wrap{ max-width: 1040px; }
+.auth-topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  max-width: 1000px;
+  margin: 0 auto 1.25rem;
+  padding: 0 .25rem;
+}
+.about-link{
+  background:none;
+  border:none;
+  color: var(--sage-dark);
+  font-weight:600;
+  font-size:.9rem;
+  display:flex; align-items:center; gap:.4rem;
+}
+.about-link:hover{ color: var(--accent-dark); }
+
+.auth-card{
+  max-width: 1000px;
+  width:100%;
+  margin: 0 auto;
+  border-radius: 26px;
+  overflow:hidden;
+  background: var(--card);
+}
+.auth-illustration{
+  background: linear-gradient(165deg, #FCEFDD, #F6EFDC);
+  padding: 2.25rem 2rem;
+}
+.eyebrow{
+  font-family:'Space Mono', monospace;
+  font-size:.72rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--sage-dark);
+  margin-bottom:.5rem;
+}
+.hero-headline{
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--text);
+  margin-bottom: .75rem;
+}
+.auth-tagline{
+  color: var(--muted);
+  max-width: 320px;
+  font-size: .95rem;
+}
+.form-heading{ font-weight: 700; }
+
+/* Hero receipt animation */
+.hero-receipt{ margin: 1.25rem 0; }
+.hero-receipt-paper{
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.1rem 1.2rem;
+  box-shadow: 0 14px 30px rgba(33,48,43,.10);
+  position: relative;
+}
+.hero-receipt-header{
+  display:flex; align-items:center; gap:.35rem;
+  margin-bottom:.7rem;
+}
+.hero-receipt-header .dot{
+  width:7px;height:7px;border-radius:50%;
+  background: var(--border);
+}
+.hero-receipt-title{
+  font-family:'Space Mono', monospace;
+  font-size:.68rem;
+  text-transform: uppercase;
+  letter-spacing:.08em;
+  color: var(--muted);
+  margin-left:.4rem;
+}
+.hero-receipt-list{
+  list-style:none; margin:0; padding:0;
+}
+.hero-receipt-list li{
+  position:relative;
+  padding-left:1.7rem;
+  margin-bottom:.5rem;
+  font-family:'Space Mono', monospace;
+  font-size:.82rem;
+  color: var(--text);
+  animation: strikeText 3.6s ease-in-out infinite;
+  animation-delay: var(--d);
+}
+.hero-receipt-list li::before{
+  content:'';
+  position:absolute; left:0; top:2px;
+  width:14px;height:14px;
+  border:2px solid var(--sage);
+  border-radius:4px;
+  animation: checkPulse 3.6s ease-in-out infinite;
+  animation-delay: var(--d);
+}
+@keyframes checkPulse{
+  0%,15%{ background: transparent; }
+  35%,80%{ background: var(--sage); }
+  95%,100%{ background: transparent; }
+}
+@keyframes strikeText{
+  0%,15%{ opacity:.9; text-decoration: none; }
+  35%,80%{ opacity:.5; text-decoration: line-through; text-decoration-color: var(--sage); }
+  95%,100%{ opacity:.9; text-decoration: none; }
+}
+.hero-receipt-total{
+  display:flex; justify-content:space-between; align-items:center;
+  border-top: 1px dashed var(--border);
+  margin-top:.6rem; padding-top:.6rem;
+  font-size:.78rem;
+  color: var(--muted);
+}
+.hero-receipt-amount{
+  font-family:'Space Mono', monospace;
+  font-weight:700;
+  color: var(--accent-dark);
+  font-size: .95rem;
+}
+
+/* Value chips */
+.value-row{
+  display:flex;
+  flex-direction: column;
+  gap:.55rem;
+}
+.value-row-mobile{ flex-direction: row; flex-wrap: wrap; }
+.value-chip{
+  display:flex; align-items:center; gap:.55rem;
+  font-size:.82rem;
+  color: var(--text);
+  background: rgba(255,255,255,.6);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: .4rem .8rem;
+}
+.value-row-mobile .value-chip{ font-size:.76rem; padding:.35rem .65rem; }
+.value-chip i{ color: var(--sage-dark); }
+
+.room-wrap{ max-width: 800px; }
+
+/* How it works strip */
+.how-it-works{
+  display:flex; align-items:center; justify-content:center;
+  flex-wrap: wrap;
+  gap:.6rem;
+  background: rgba(255,255,255,.6);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: .7rem 1.1rem;
+  margin: 0 auto 2rem;
+  max-width: 720px;
+}
+.how-it-works .step{
+  display:flex; align-items:center; gap:.5rem;
+  font-size:.82rem;
+  font-weight:500;
+  color: var(--text);
+}
+.step-num{
+  font-family:'Space Mono', monospace;
+  font-weight:700;
+  font-size:.72rem;
+  color: var(--accent-dark);
+  background: rgba(255,107,74,.12);
+  border-radius: 6px;
+  padding: .1rem .4rem;
+}
+.step-arrow{ color: var(--border); font-size:.8rem; }
+
+.room-card{ border-radius: var(--radius); transition: transform .15s ease, box-shadow .15s ease; }
+.room-card:hover{ transform: translateY(-3px); box-shadow: 0 14px 26px rgba(31,58,61,.12) !important; }
+.room-icon{
+  width:46px;height:46px;
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff; font-size:1.2rem;
+}
+.bg-accent{ background: var(--accent); }
+.bg-accent-2{ background: var(--accent-2); }
+
+/* Ticket tear line */
+.tear-line{
+  height:0;
+  border-top: 2px dashed var(--border);
+  margin: .75rem -1rem 0;
+  position: relative;
+}
+.tear-line::before, .tear-line::after{
+  content:'';
+  position:absolute; top:-8px;
+  width:16px;height:16px;border-radius:50%;
+  background: var(--bg);
+}
+.tear-line::before{ left:-9px; }
+.tear-line::after{ right:-9px; }
+.tear-line-top{
+  margin: 0;
+  border-top: 2px dashed var(--border);
+}
+.tear-line-top::before{ background: var(--bg); }
+.tear-line-top::after{ background: var(--bg); }
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width: 260px;
+  min-height:100vh;
+  background: linear-gradient(180deg, var(--sidebar), var(--sidebar-2));
+  color:#fff;
+  position: sticky;
+  top:0;
+  height:100vh;
+}
+.text-bg-sidebar{
+  background: linear-gradient(180deg, var(--sidebar), var(--sidebar-2)) !important;
+  color:#fff;
+}
+.room-chip{
+  background: rgba(255,255,255,.08);
+  border: 1px dashed rgba(255,255,255,.2);
+  border-radius: var(--radius-sm);
+  padding: .7rem .9rem;
+  color:#fff;
+}
+.letter-spaced{ letter-spacing: 3px; font-family:'Space Mono', monospace; }
+
+.nav-link-custom{
+  display:flex; align-items:center; gap:.65rem;
+  color: rgba(255,255,255,.75);
+  background: transparent;
+  border:none;
+  text-align:left;
+  padding: .6rem .8rem;
+  border-radius: var(--radius-sm);
+  font-weight:500;
+  font-size:.95rem;
+  transition: background .15s ease, color .15s ease, transform .15s ease;
+}
+.nav-link-custom i{ font-size:1.05rem; width:20px; }
+.nav-link-custom:hover{ background: rgba(255,255,255,.08); color:#fff; transform: translateX(2px); }
+.nav-link-custom.active{
+  background: var(--accent);
+  color:#fff;
+}
+
+.user-chip{
+  display:flex; align-items:center; gap:.5rem;
+  color: rgba(255,255,255,.85);
+  font-size:.9rem;
+  padding: .4rem .2rem;
+}
+.user-chip i{ font-size:1.3rem; }
+
+/* ---------- Topbar / main ---------- */
+.main-content{ min-height:100vh; }
+.topbar{
+  height:64px;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top:0; z-index:10;
+}
+.content-scroll{ max-width: 1100px; margin: 0 auto; }
+
+.stat-pill{
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: .35rem .85rem;
+  font-size: .85rem;
+  font-weight:600;
+  color: var(--text);
+  font-family:'Space Mono', monospace;
+}
+.stat-pill i{ color: var(--sage-dark); margin-right:.25rem; font-family:'Inter'; }
+.stat-pill-accent i{ color: var(--accent); }
+
+/* ---------- Cards ---------- */
+.card{ border-radius: var(--radius); }
+.add-item-card{ background: linear-gradient(180deg,#fff, #FFFCF4); border-top: 3px solid var(--accent-2); }
+
+.item-card{
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  border-left: 4px solid transparent;
+  padding: .9rem 1.1rem;
+  margin-bottom: .7rem;
+  display:flex; align-items:center; gap: 1rem;
+  transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+  animation: fadeIn .3s ease;
+}
+.item-card:hover{
+  box-shadow: 0 10px 20px rgba(31,58,61,.09);
+  transform: translateY(-1px);
+  border-left-color: var(--accent);
+}
+.item-swatch{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff; font-size:1.1rem; flex-shrink:0;
+}
+.item-meta{ flex:1; min-width:0; }
+.item-name{ font-weight:600; }
+.item-sub{ font-size:.8rem; color:var(--muted); }
+.item-price{ font-weight:700; white-space:nowrap; font-family:'Space Mono', monospace; }
+.item-actions{ display:flex; gap:.35rem; }
+.item-actions .btn{ border-radius:8px; padding: .3rem .5rem; }
+
+@keyframes fadeIn{
+  from{ opacity:0; transform: translateY(8px); }
+  to{ opacity:1; transform: translateY(0); }
+}
+
+/* Category badge colors */
+.cat-Groceries{ background: var(--sage); }
+.cat-Household{ background: #8A6FDF; }
+.cat-Electronics{ background: #3D7DD6; }
+.cat-Personal-Care{ background: #D6608E; }
+.cat-Other{ background: #9A8C78; }
+
+/* ---------- Activity log ---------- */
+.activity-list{ margin:0; padding:0; }
+.activity-list li{
+  display:flex; gap:.75rem;
+  padding: .6rem 0;
+  border-bottom: 1px dashed var(--border);
+  font-size:.9rem;
+}
+.activity-list li:last-child{ border-bottom:none; }
+.activity-dot{
+  width:8px;height:8px;border-radius:50%;
+  background: var(--accent);
+  margin-top:.4rem; flex-shrink:0;
+}
+.activity-time{ color: var(--muted); font-size:.78rem; }
+
+/* ---------- Members ---------- */
+.member-card{
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display:flex; align-items:center; gap:.75rem;
+  transition: transform .15s ease;
+}
+.member-card:hover{ transform: translateY(-2px); }
+.member-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color:#fff; display:flex;align-items:center;justify-content:center;
+  font-weight:700;
+  font-family:'Space Mono', monospace;
+}
+
+/* ---------- Receipt ---------- */
+.receipt-card{ max-width: 640px; margin: 0 auto; position: relative; overflow: hidden; }
+.receipt-table th{ font-size:.78rem; text-transform:uppercase; color:var(--muted); font-weight:600; border-top:none; }
+.receipt-meta{ color: var(--muted); font-family:'Space Mono', monospace; font-size:.8rem; }
+.receipt-barcode{
+  height:22px;
+  margin: 0 2rem 1.25rem;
+  background-image: repeating-linear-gradient(90deg, var(--text) 0 2px, transparent 2px 5px, var(--text) 5px 6px, transparent 6px 11px);
+  opacity:.65;
+}
+
+/* ---------- About modal ---------- */
+.about-modal-content{ border-radius: var(--radius); }
+.about-row{
+  display:flex; gap:.85rem;
+  align-items:flex-start;
+  margin-bottom: 1.1rem;
+}
+.about-row i{
+  font-size:1.15rem;
+  color: var(--accent-dark);
+  margin-top:.15rem;
+}
+
+/* ---------- Empty state ---------- */
+.empty-state{ color: var(--muted); }
+
+/* ---------- Toasts ---------- */
+.toast{ border-radius: var(--radius-sm); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 991.98px){
+  .content-scroll{ padding-bottom: 3rem; }
+  .how-it-works{ gap:.4rem .7rem; }
+  .step-arrow{ display:none; }
+}
+@media (max-width: 575.98px){
+  .hero-headline{ font-size: 1.8rem; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  .ambient-bg span,
+  .hero-receipt-list li,
+  .hero-receipt-list li::before,
+  .item-card{
+    animation: none !important;
+  }
+}
+
+/* ---------- Print ---------- */
+@media print{
+  body{ background:#fff; }
+  .no-print{ display:none !important; }
+  .sidebar, .topbar, .offcanvas{ display:none !important; }
+  .main-content{ margin:0; }
+  #dashboard, #view-receipt{ display:block !important; }
+  .view:not(#view-receipt){ display:none !important; }
+  .receipt-card{ box-shadow:none !important; border:none !important; }
+  .content-scroll{ max-width:100%; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============ TOAST HOST ============ -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastHost" style="z-index:1080"></div>
+
+<!-- ============ SCREEN: LOGIN ============ -->
+<section id="authScreen" class="auth-screen d-flex align-items-center justify-content-center">
+
+  <div class="ambient-bg" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <div class="auth-wrap">
+
+    <div class="auth-topline">
+      <div class="brand-mark">
+        <span class="brand-icon"><i class="bi bi-basket3-fill"></i></span>
+        <span class="brand-text">CartShare</span>
+      </div>
+      <button type="button" class="about-link" data-bs-toggle="modal" data-bs-target="#aboutModal">
+        <i class="bi bi-info-circle"></i> What's CartShare?
+      </button>
+    </div>
+
+    <div class="auth-card card border-0 shadow-lg">
+      <div class="row g-0">
+        <div class="col-lg-6 auth-illustration d-none d-lg-flex flex-column justify-content-between">
+          <div>
+            <p class="eyebrow">for dorms, offices &amp; trips</p>
+            <h1 class="hero-headline">One list.<br>Everyone in it.</h1>
+            <p class="auth-tagline">No more scattered texts, sticky notes, or "wait, did anyone get eggs?" Add it once, everyone sees it.</p>
+          </div>
+
+          <div class="hero-receipt" aria-hidden="true">
+            <div class="hero-receipt-paper">
+              <div class="hero-receipt-header">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span class="hero-receipt-title">shared list</span>
+              </div>
+              <ul class="hero-receipt-list">
+                <li style="--d:0s">free-range eggs</li>
+                <li style="--d:.7s">oat milk</li>
+                <li style="--d:1.4s">paper towels ×2</li>
+                <li style="--d:2.1s">chips, the good kind</li>
+              </ul>
+              <div class="hero-receipt-total">
+                <span>running total</span>
+                <span class="hero-receipt-amount">$46.50</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="value-row">
+            <div class="value-chip">
+              <i class="bi bi-people-fill"></i>
+              <span>Everyone adds, everyone sees it live</span>
+            </div>
+            <div class="value-chip">
+              <i class="bi bi-truck"></i>
+              <span>Watch the total climb toward free shipping</span>
+            </div>
+            <div class="value-chip">
+              <i class="bi bi-receipt-cutoff"></i>
+              <span>Printable receipt, tagged by who added what</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="p-4 p-md-5">
+            <h2 class="h3 fw-bold mb-1 form-heading">Welcome</h2>
+            <p class="text-muted mb-4">Tell us your name to start a shared cart session.</p>
+            <form id="loginForm" novalidate>
+              <label class="form-label small fw-semibold text-uppercase">Your name</label>
+              <div class="input-group input-group-lg mb-2">
+                <span class="input-group-text bg-transparent"><i class="bi bi-person"></i></span>
+                <input type="text" class="form-control" id="usernameInput" placeholder="e.g. Amara" maxlength="24" required>
+              </div>
+              <div class="form-text mb-4">This name will appear next to items you add.</div>
+              <button type="submit" class="btn btn-brand btn-lg w-100">
+                Continue <i class="bi bi-arrow-right ms-1"></i>
+              </button>
+            </form>
+
+            <div class="value-row value-row-mobile d-lg-none mt-4">
+              <div class="value-chip">
+                <i class="bi bi-people-fill"></i>
+                <span>Live shared list</span>
+              </div>
+              <div class="value-chip">
+                <i class="bi bi-truck"></i>
+                <span>Free-shipping tracker</span>
+              </div>
+              <div class="value-chip">
+                <i class="bi bi-receipt-cutoff"></i>
+                <span>Fair, printable receipt</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN: ROOM SELECT ============ -->
+<section id="roomScreen" class="auth-screen d-none align-items-center justify-content-center">
+
+  <div class="ambient-bg" aria-hidden="true"><span></span><span></span><span></span></div>
+
+  <div class="room-wrap">
+    <div class="text-center mb-4">
+      <div class="brand-mark justify-content-center mb-3">
+        <span class="brand-icon"><i class="bi bi-basket3-fill"></i></span>
+        <span class="brand-text">CartShare</span>
+      </div>
+      <p class="text-muted mb-0">Hey <strong id="greetName">there</strong> — create a fresh room or join one with a code.</p>
+    </div>
+
+    <div class="how-it-works">
+      <div class="step">
+        <span class="step-num">01</span>
+        <span>Create or join a room</span>
+      </div>
+      <i class="bi bi-arrow-right step-arrow"></i>
+      <div class="step">
+        <span class="step-num">02</span>
+        <span>Share the code with your group</span>
+      </div>
+      <i class="bi bi-arrow-right step-arrow"></i>
+      <div class="step">
+        <span class="step-num">03</span>
+        <span>Add items &amp; shop together</span>
+      </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-5">
+        <div class="card room-card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="room-icon bg-accent-2 mb-3"><i class="bi bi-plus-lg"></i></div>
+            <h2 class="h5 fw-bold">Create a room</h2>
+            <p class="text-muted small">Spin up a new shared cart and invite others with the generated code.</p>
+            <div class="tear-line"></div>
+            <button id="createRoomBtn" class="btn btn-outline-brand w-100 mt-3">Create Room</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="card room-card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="room-icon bg-accent mb-3"><i class="bi bi-box-arrow-in-right"></i></div>
+            <h2 class="h5 fw-bold">Join a room</h2>
+            <p class="text-muted small">Enter a room code shared with you to hop into their cart.</p>
+            <div class="tear-line"></div>
+            <form id="joinRoomForm" class="d-flex gap-2 mt-3">
+              <input type="text" id="joinRoomInput" class="form-control text-uppercase" placeholder="ROOM CODE" maxlength="6" required>
+              <button type="submit" class="btn btn-brand">Join</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <button id="logoutFromRoom" class="btn btn-link text-muted small"><i class="bi bi-arrow-left"></i> not you? switch name</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCREEN: DASHBOARD ============ -->
+<section id="dashboard" class="d-none">
+  <div class="d-flex">
+
+    <!-- Sidebar (desktop) -->
+    <aside class="sidebar d-none d-lg-flex flex-column no-print">
+      <div class="brand-mark px-3 pt-4 pb-3">
+        <span class="brand-icon"><i class="bi bi-basket3-fill"></i></span>
+        <span class="brand-text text-white">CartShare</span>
+      </div>
+
+      <div class="room-chip mx-3 mb-3">
+        <div class="small text-uppercase opacity-75">Room code</div>
+        <div class="d-flex align-items-center justify-content-between">
+          <span class="fw-bold fs-5 letter-spaced" id="sbRoomCode">------</span>
+          <button class="btn btn-sm btn-ghost" id="copyCodeBtn" title="Copy code"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+
+      <nav class="nav flex-column px-3 gap-1" id="sideNav">
+        <button class="nav-link-custom active" data-view="cart"><i class="bi bi-basket3"></i> Cart</button>
+        <button class="nav-link-custom" data-view="activity"><i class="bi bi-clock-history"></i> Activity Log</button>
+        <button class="nav-link-custom" data-view="members"><i class="bi bi-people"></i> Members</button>
+        <button class="nav-link-custom" data-view="receipt"><i class="bi bi-receipt"></i> Receipt</button>
+      </nav>
+
+      <div class="mt-auto px-3 pb-4">
+        <div class="user-chip mb-2">
+          <i class="bi bi-person-circle"></i>
+          <span id="sbUserName">User</span>
+        </div>
+        <button id="leaveRoomBtn" class="btn btn-sm btn-outline-light w-100 mb-2"><i class="bi bi-box-arrow-left"></i> Leave room</button>
+      </div>
+    </aside>
+
+    <!-- Offcanvas sidebar (mobile) -->
+    <div class="offcanvas offcanvas-start text-bg-sidebar no-print" tabindex="-1" id="mobileSidebar">
+      <div class="offcanvas-header">
+        <div class="brand-mark">
+          <span class="brand-icon"><i class="bi bi-basket3-fill"></i></span>
+          <span class="brand-text text-white">CartShare</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column">
+        <div class="room-chip mb-3">
+          <div class="small text-uppercase opacity-75">Room code</div>
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="fw-bold fs-5 letter-spaced" id="sbRoomCodeM">------</span>
+            <button class="btn btn-sm btn-ghost" id="copyCodeBtnM"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+        <nav class="nav flex-column gap-1" id="sideNavMobile">
+          <button class="nav-link-custom active" data-view="cart"><i class="bi bi-basket3"></i> Cart</button>
+          <button class="nav-link-custom" data-view="activity"><i class="bi bi-clock-history"></i> Activity Log</button>
+          <button class="nav-link-custom" data-view="members"><i class="bi bi-people"></i> Members</button>
+          <button class="nav-link-custom" data-view="receipt"><i class="bi bi-receipt"></i> Receipt</button>
+        </nav>
+        <div class="mt-auto">
+          <div class="user-chip mb-2"><i class="bi bi-person-circle"></i><span id="sbUserNameM">User</span></div>
+          <button id="leaveRoomBtnM" class="btn btn-sm btn-outline-light w-100"><i class="bi bi-box-arrow-left"></i> Leave room</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <main class="main-content flex-grow-1">
+      <!-- Top bar -->
+      <div class="topbar d-flex align-items-center justify-content-between px-3 px-lg-4 no-print">
+        <div class="d-flex align-items-center gap-2">
+          <button class="btn btn-icon d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar"><i class="bi bi-list fs-4"></i></button>
+          <h1 class="h5 fw-bold mb-0" id="viewTitle">Shared Cart</h1>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <div class="stat-pill">
+            <i class="bi bi-basket3"></i> <span id="itemCountPill">0</span> items
+          </div>
+          <div class="stat-pill stat-pill-accent">
+            <i class="bi bi-currency-dollar"></i> <span id="totalPill">0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-scroll p-3 p-lg-4">
+
+        <!-- VIEW: CART -->
+        <div id="view-cart" class="view">
+          <div class="card add-item-card border-0 shadow-sm mb-4">
+            <div class="card-body p-3 p-lg-4">
+              <h2 class="h6 fw-bold mb-3"><i class="bi bi-plus-circle me-1"></i> Add an item</h2>
+              <form id="addItemForm" class="row g-2 align-items-end">
+                <div class="col-12 col-md-4">
+                  <label class="form-label small text-muted mb-1">Item name</label>
+                  <input type="text" class="form-control" id="itemName" placeholder="Organic bananas" required>
+                </div>
+                <div class="col-6 col-md-2">
+                  <label class="form-label small text-muted mb-1">Qty</label>
+                  <input type="number" class="form-control" id="itemQty" value="1" min="1" required>
+                </div>
+                <div class="col-6 col-md-2">
+                  <label class="form-label small text-muted mb-1">Price</label>
+                  <input type="number" class="form-control" id="itemPrice" value="0.00" min="0" step="0.01" required>
+                </div>
+                <div class="col-6 col-md-2">
+                  <label class="form-label small text-muted mb-1">Category</label>
+                  <select class="form-select" id="itemCategory">
+                    <option>Groceries</option>
+                    <option>Household</option>
+                    <option>Electronics</option>
+                    <option>Personal Care</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="col-6 col-md-2">
+                  <button type="submit" class="btn btn-brand w-100"><i class="bi bi-plus-lg"></i> Add</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div id="cartListWrap">
+            <!-- injected item cards -->
+          </div>
+
+          <div id="emptyCart" class="empty-state d-none text-center py-5">
+            <svg width="120" height="120" viewBox="0 0 200 200" fill="none">
+              <circle cx="100" cy="100" r="90" fill="#F0EBE1"/>
+              <rect x="55" y="85" width="90" height="65" rx="8" fill="#D8CFC0"/>
+              <path d="M65 85 L58 62 H45" stroke="#B8AC98" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+            <p class="text-muted mt-3 mb-0">Your cart is empty. Add the first item above!</p>
+          </div>
+        </div>
+
+        <!-- VIEW: ACTIVITY -->
+        <div id="view-activity" class="view d-none">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-3 p-lg-4">
+              <h2 class="h6 fw-bold mb-3"><i class="bi bi-clock-history me-1"></i> Activity Log</h2>
+              <ul class="list-unstyled activity-list" id="activityList"></ul>
+              <div id="emptyActivity" class="text-muted small d-none">No activity yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: MEMBERS -->
+        <div id="view-members" class="view d-none">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-3 p-lg-4">
+              <h2 class="h6 fw-bold mb-3"><i class="bi bi-people me-1"></i> Members in this room</h2>
+              <div class="row g-3" id="membersList"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW: RECEIPT -->
+        <div id="view-receipt" class="view d-none">
+          <div class="d-flex justify-content-end mb-3 no-print">
+            <button id="printBtn" class="btn btn-brand"><i class="bi bi-printer me-1"></i> Print Receipt</button>
+          </div>
+          <div class="card border-0 shadow-sm receipt-card" id="receiptCard">
+            <div class="tear-line tear-line-top"></div>
+            <div class="card-body p-4 p-lg-5">
+              <div class="text-center mb-4">
+                <div class="brand-mark justify-content-center mb-1">
+                  <span class="brand-icon"><i class="bi bi-basket3-fill"></i></span>
+                  <span class="brand-text">CartShare</span>
+                </div>
+                <div class="small text-muted">Shared Cart Receipt</div>
+              </div>
+              <div class="d-flex justify-content-between small mb-3 receipt-meta">
+                <div><strong>Room:</strong> <span id="rcRoom">------</span></div>
+                <div><strong>Date:</strong> <span id="rcDate">-</span></div>
+              </div>
+              <hr>
+              <table class="table receipt-table">
+                <thead>
+                  <tr><th>Item</th><th>Qty</th><th>Price</th><th class="text-end">Subtotal</th></tr>
+                </thead>
+                <tbody id="rcBody"></tbody>
+              </table>
+              <hr>
+              <div class="d-flex justify-content-end">
+                <div class="text-end">
+                  <div class="small text-muted">Grand Total</div>
+                  <div class="h4 fw-bold" id="rcTotal">$0.00</div>
+                </div>
+              </div>
+              <p class="text-center text-muted small mt-4 mb-0">Thank you for shopping together with CartShare 🛒</p>
+            </div>
+            <div class="receipt-barcode" aria-hidden="true"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</section>
+
+<!-- ============ EDIT ITEM MODAL ============ -->
+<div class="modal fade" id="editItemModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Edit Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="editItemForm">
+        <div class="modal-body">
+          <input type="hidden" id="editItemId">
+          <div class="mb-3">
+            <label class="form-label small text-muted">Item name</label>
+            <input type="text" class="form-control" id="editItemName" required>
+          </div>
+          <div class="row g-2">
+            <div class="col-4">
+              <label class="form-label small text-muted">Qty</label>
+              <input type="number" class="form-control" id="editItemQty" min="1" required>
+            </div>
+            <div class="col-4">
+              <label class="form-label small text-muted">Price</label>
+              <input type="number" class="form-control" id="editItemPrice" min="0" step="0.01" required>
+            </div>
+            <div class="col-4">
+              <label class="form-label small text-muted">Category</label>
+              <select class="form-select" id="editItemCategory">
+                <option>Groceries</option>
+                <option>Household</option>
+                <option>Electronics</option>
+                <option>Personal Care</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-brand">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ABOUT MODAL ============ -->
+<div class="modal fade" id="aboutModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content about-modal-content">
+      <div class="modal-header border-0">
+        <div class="brand-mark">
+          <span class="brand-icon"><i class="bi bi-basket3-fill"></i></span>
+          <span class="brand-text">CartShare</span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body pt-0">
+        <p class="text-muted mb-4">Shared living and travel groups usually coordinate purchases through a mess of chats and sticky notes — items get missed, doubled up, and nobody remembers who paid for what. CartShare fixes that with one live list.</p>
+        <div class="about-row">
+          <i class="bi bi-people-fill"></i>
+          <div>
+            <div class="fw-semibold">One list, no gaps</div>
+            <div class="small text-muted">Everyone adds and edits the same cart — updates sync instantly across every open tab.</div>
+          </div>
+        </div>
+        <div class="about-row">
+          <i class="bi bi-truck"></i>
+          <div>
+            <div class="fw-semibold">Hit your shipping minimum</div>
+            <div class="small text-muted">The running total is always visible, so the group knows exactly when they've cleared the free-delivery threshold.</div>
+          </div>
+        </div>
+        <div class="about-row">
+          <i class="bi bi-receipt-cutoff"></i>
+          <div>
+            <div class="fw-semibold">Split fairly, print it out</div>
+            <div class="small text-muted">Every item is tagged with who added it, and the printable receipt makes splitting costs a two-second job.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+'use strict';
+
+/* =========================================================
+   CartShare — app.js
+   Vanilla ES6, Bootstrap 5, localStorage persistence,
+   cross-tab sync via the "storage" event.
+   ========================================================= */
+
+const LS_PREFIX = 'groupcart_room_';
+const SS_USER = 'groupcart_username';
+const SS_ROOM = 'groupcart_room';
+
+const CATEGORY_CLASS = {
+  'Groceries': 'cat-Groceries',
+  'Household': 'cat-Household',
+  'Electronics': 'cat-Electronics',
+  'Personal Care': 'cat-Personal-Care',
+  'Other': 'cat-Other'
+};
+const CATEGORY_ICON = {
+  'Groceries': 'bi-egg-fried',
+  'Household': 'bi-house-door',
+  'Electronics': 'bi-cpu',
+  'Personal Care': 'bi-droplet',
+  'Other': 'bi-box-seam'
+};
+
+function uid(){ return Math.random().toString(36).slice(2, 10); }
+
+function genRoomCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = '';
+  for(let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
+
+function money(n){ return '$' + Number(n || 0).toFixed(2); }
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function timeAgo(ts){
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if(diff < 5) return 'just now';
+  if(diff < 60) return diff + 's ago';
+  if(diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if(diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  return new Date(ts).toLocaleString();
+}
+
+function showToast(message, variant){
+  variant = variant || 'brand';
+  const host = document.getElementById('toastHost');
+  const el = document.createElement('div');
+  el.className = 'toast align-items-center border-0 show';
+  el.style.background = variant === 'danger' ? '#F6DCD3' : '#DFF3EF';
+  el.style.color = 'var(--text)';
+  el.innerHTML = `
+    <div class="d-flex">
+      <div class="toast-body">${escapeHtml(message)}</div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>`;
+  host.appendChild(el);
+  const t = new bootstrap.Toast(el, { delay: 2600 });
+  t.show();
+  el.addEventListener('hidden.bs.toast', () => el.remove());
+}
+
+function roomKey(code){ return LS_PREFIX + code.toUpperCase(); }
+
+function roomExists(code){
+  return localStorage.getItem(roomKey(code)) !== null;
+}
+
+function loadRoom(code){
+  const raw = localStorage.getItem(roomKey(code));
+  return raw ? JSON.parse(raw) : null;
+}
+
+function saveRoom(room){
+  localStorage.setItem(roomKey(room.code), JSON.stringify(room));
+}
+
+function createRoom(){
+  let code = genRoomCode();
+  while(roomExists(code)) code = genRoomCode();
+  const room = { code, createdAt: Date.now(), items: [], activity: [], members: [] };
+  saveRoom(room);
+  return room;
+}
+
+function logActivity(room, user, text){
+  room.activity.unshift({ id: uid(), user, text, ts: Date.now() });
+  if(room.activity.length > 200) room.activity.length = 200;
+}
+
+function ensureMember(room, user){
+  if(!room.members.find(m => m.name === user)){
+    room.members.push({ name: user, joinedAt: Date.now() });
+    logActivity(room, user, `joined the room`);
+  }
+}
+
+const state = {
+  username: sessionStorage.getItem(SS_USER) || '',
+  roomCode: sessionStorage.getItem(SS_ROOM) || '',
+  currentView: 'cart'
+};
+
+function showScreen(name){
+  document.getElementById('authScreen').classList.toggle('d-none', name !== 'auth');
+  document.getElementById('authScreen').classList.toggle('d-flex', name === 'auth');
+  document.getElementById('roomScreen').classList.toggle('d-none', name !== 'room');
+  document.getElementById('roomScreen').classList.toggle('d-flex', name === 'room');
+  document.getElementById('dashboard').classList.toggle('d-none', name !== 'dashboard');
+}
+
+function boot(){
+  if(!state.username){
+    showScreen('auth');
+  } else if(!state.roomCode || !roomExists(state.roomCode)){
+    document.getElementById('greetName').textContent = state.username;
+    showScreen('room');
+  } else {
+    enterDashboard();
+  }
+}
+
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const input = document.getElementById('usernameInput');
+  const name = input.value.trim();
+  if(!name) return;
+  state.username = name;
+  sessionStorage.setItem(SS_USER, name);
+  document.getElementById('greetName').textContent = name;
+  showScreen('room');
+});
+
+document.getElementById('logoutFromRoom').addEventListener('click', () => {
+  sessionStorage.removeItem(SS_USER);
+  state.username = '';
+  showScreen('auth');
+});
+
+document.getElementById('createRoomBtn').addEventListener('click', () => {
+  const room = createRoom();
+  ensureMember(room, state.username);
+  saveRoom(room);
+  state.roomCode = room.code;
+  sessionStorage.setItem(SS_ROOM, room.code);
+  enterDashboard();
+  showToast(`Room ${room.code} created!`);
+});
+
+document.getElementById('joinRoomForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const input = document.getElementById('joinRoomInput');
+  const code = input.value.trim().toUpperCase();
+  if(!code) return;
+  if(!roomExists(code)){
+    showToast(`Room "${code}" not found. Double check the code or create a new room.`, 'danger');
+    return;
+  }
+  const room = loadRoom(code);
+  ensureMember(room, state.username);
+  saveRoom(room);
+  state.roomCode = code;
+  sessionStorage.setItem(SS_ROOM, code);
+  enterDashboard();
+  showToast(`Joined room ${code}`);
+});
+
+function leaveRoom(){
+  const room = loadRoom(state.roomCode);
+  if(room){
+    logActivity(room, state.username, 'left the room');
+    saveRoom(room);
+  }
+  sessionStorage.removeItem(SS_ROOM);
+  state.roomCode = '';
+  document.getElementById('greetName').textContent = state.username;
+  showScreen('room');
+}
+document.getElementById('leaveRoomBtn').addEventListener('click', leaveRoom);
+document.getElementById('leaveRoomBtnM').addEventListener('click', leaveRoom);
+
+function enterDashboard(){
+  showScreen('dashboard');
+  document.getElementById('sbRoomCode').textContent = state.roomCode;
+  document.getElementById('sbRoomCodeM').textContent = state.roomCode;
+  document.getElementById('sbUserName').textContent = state.username;
+  document.getElementById('sbUserNameM').textContent = state.username;
+  switchView('cart');
+  renderAll();
+}
+
+const VIEW_TITLES = {
+  cart: 'Shared Cart',
+  activity: 'Activity Log',
+  members: 'Members',
+  receipt: 'Printable Receipt'
+};
+
+function switchView(view){
+  state.currentView = view;
+  document.querySelectorAll('.view').forEach(v => v.classList.add('d-none'));
+  document.getElementById('view-' + view).classList.remove('d-none');
+  document.getElementById('viewTitle').textContent = VIEW_TITLES[view];
+
+  [...document.querySelectorAll('#sideNav .nav-link-custom'), ...document.querySelectorAll('#sideNavMobile .nav-link-custom')]
+    .forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+
+  renderAll();
+
+  const oc = bootstrap.Offcanvas.getInstance(document.getElementById('mobileSidebar'));
+  if(oc) oc.hide();
+}
+
+document.querySelectorAll('#sideNav .nav-link-custom, #sideNavMobile .nav-link-custom').forEach(btn => {
+  btn.addEventListener('click', () => switchView(btn.dataset.view));
+});
+
+function copyCode(){
+  navigator.clipboard?.writeText(state.roomCode).then(() => {
+    showToast('Room code copied to clipboard');
+  }).catch(() => showToast('Could not copy code', 'danger'));
+}
+document.getElementById('copyCodeBtn').addEventListener('click', copyCode);
+document.getElementById('copyCodeBtnM').addEventListener('click', copyCode);
+
+document.getElementById('addItemForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('itemName').value.trim();
+  const qty = parseInt(document.getElementById('itemQty').value, 10) || 1;
+  const price = parseFloat(document.getElementById('itemPrice').value) || 0;
+  const category = document.getElementById('itemCategory').value;
+  if(!name) return;
+
+  const room = loadRoom(state.roomCode);
+  if(!room) return;
+
+  const item = { id: uid(), name, qty, price, category, addedBy: state.username, addedAt: Date.now() };
+  room.items.unshift(item);
+  logActivity(room, state.username, `added "${name}" (x${qty})`);
+  saveRoom(room);
+
+  e.target.reset();
+  document.getElementById('itemQty').value = 1;
+  document.getElementById('itemPrice').value = '0.00';
+  renderAll();
+  showToast(`Added "${name}" to the cart`);
+});
+
+let editModalInstance = null;
+function openEditModal(itemId){
+  const room = loadRoom(state.roomCode);
+  const item = room.items.find(i => i.id === itemId);
+  if(!item) return;
+  document.getElementById('editItemId').value = item.id;
+  document.getElementById('editItemName').value = item.name;
+  document.getElementById('editItemQty').value = item.qty;
+  document.getElementById('editItemPrice').value = item.price;
+  document.getElementById('editItemCategory').value = item.category;
+  editModalInstance = editModalInstance || new bootstrap.Modal(document.getElementById('editItemModal'));
+  editModalInstance.show();
+}
+
+document.getElementById('editItemForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const id = document.getElementById('editItemId').value;
+  const room = loadRoom(state.roomCode);
+  const item = room.items.find(i => i.id === id);
+  if(!item) return;
+
+  item.name = document.getElementById('editItemName').value.trim() || item.name;
+  item.qty = parseInt(document.getElementById('editItemQty').value, 10) || 1;
+  item.price = parseFloat(document.getElementById('editItemPrice').value) || 0;
+  item.category = document.getElementById('editItemCategory').value;
+
+  logActivity(room, state.username, `edited "${item.name}"`);
+  saveRoom(room);
+
+  editModalInstance.hide();
+  renderAll();
+  showToast(`Updated "${item.name}"`);
+});
+
+function deleteItem(itemId){
+  const room = loadRoom(state.roomCode);
+  const item = room.items.find(i => i.id === itemId);
+  if(!item) return;
+  if(!confirm(`Remove "${item.name}" from the cart?`)) return;
+  room.items = room.items.filter(i => i.id !== itemId);
+  logActivity(room, state.username, `removed "${item.name}"`);
+  saveRoom(room);
+  renderAll();
+  showToast(`Removed "${item.name}"`);
+}
+
+function renderAll(){
+  const room = loadRoom(state.roomCode);
+  if(!room){ leaveRoom(); return; }
+
+  renderStats(room);
+  if(state.currentView === 'cart') renderCart(room);
+  if(state.currentView === 'activity') renderActivity(room);
+  if(state.currentView === 'members') renderMembers(room);
+  if(state.currentView === 'receipt') renderReceipt(room);
+}
+
+function renderStats(room){
+  const totalItems = room.items.reduce((s,i) => s + i.qty, 0);
+  const total = room.items.reduce((s,i) => s + i.qty * i.price, 0);
+  document.getElementById('itemCountPill').textContent = totalItems;
+  document.getElementById('totalPill').textContent = total.toFixed(2);
+}
+
+function renderCart(room){
+  const wrap = document.getElementById('cartListWrap');
+  const empty = document.getElementById('emptyCart');
+  wrap.innerHTML = '';
+
+  if(room.items.length === 0){
+    empty.classList.remove('d-none');
+    return;
+  }
+  empty.classList.add('d-none');
+
+  room.items.forEach(item => {
+    const catClass = CATEGORY_CLASS[item.category] || 'cat-Other';
+    const catIcon = CATEGORY_ICON[item.category] || 'bi-box-seam';
+    const card = document.createElement('div');
+    card.className = 'item-card';
+    card.innerHTML = `
+      <div class="item-swatch ${catClass}"><i class="bi ${catIcon}"></i></div>
+      <div class="item-meta">
+        <div class="item-name">${escapeHtml(item.name)}</div>
+        <div class="item-sub">Qty ${item.qty} &middot; ${escapeHtml(item.category)} &middot; added by ${escapeHtml(item.addedBy)}</div>
+      </div>
+      <div class="item-price">${money(item.qty * item.price)}</div>
+      <div class="item-actions">
+        <button class="btn btn-sm btn-light" data-action="edit" data-id="${item.id}" title="Edit"><i class="bi bi-pencil"></i></button>
+        <button class="btn btn-sm btn-light text-danger" data-action="delete" data-id="${item.id}" title="Delete"><i class="bi bi-trash3"></i></button>
+      </div>`;
+    wrap.appendChild(card);
+  });
+
+  wrap.querySelectorAll('[data-action="edit"]').forEach(btn => {
+    btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+  });
+  wrap.querySelectorAll('[data-action="delete"]').forEach(btn => {
+    btn.addEventListener('click', () => deleteItem(btn.dataset.id));
+  });
+}
+
+function renderActivity(room){
+  const list = document.getElementById('activityList');
+  const empty = document.getElementById('emptyActivity');
+  list.innerHTML = '';
+  if(room.activity.length === 0){
+    empty.classList.remove('d-none');
+    return;
+  }
+  empty.classList.add('d-none');
+  room.activity.forEach(a => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <div class="activity-dot"></div>
+      <div>
+        <div><strong>${escapeHtml(a.user)}</strong> ${escapeHtml(a.text)}</div>
+        <div class="activity-time">${timeAgo(a.ts)}</div>
+      </div>`;
+    list.appendChild(li);
+  });
+}
+
+function renderMembers(room){
+  const wrap = document.getElementById('membersList');
+  wrap.innerHTML = '';
+  room.members.forEach(m => {
+    const col = document.createElement('div');
+    col.className = 'col-sm-6 col-lg-4';
+    const initials = m.name.trim().slice(0,2).toUpperCase();
+    col.innerHTML = `
+      <div class="member-card">
+        <div class="member-avatar">${escapeHtml(initials)}</div>
+        <div>
+          <div class="fw-semibold">${escapeHtml(m.name)}${m.name === state.username ? ' <span class="badge bg-secondary-subtle text-dark ms-1">you</span>' : ''}</div>
+          <div class="small text-muted">joined ${timeAgo(m.joinedAt)}</div>
+        </div>
+      </div>`;
+    wrap.appendChild(col);
+  });
+}
+
+function renderReceipt(room){
+  document.getElementById('rcRoom').textContent = room.code;
+  document.getElementById('rcDate').textContent = new Date().toLocaleString();
+  const body = document.getElementById('rcBody');
+  body.innerHTML = '';
+  let total = 0;
+  room.items.forEach(item => {
+    const subtotal = item.qty * item.price;
+    total += subtotal;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${escapeHtml(item.name)}</td>
+      <td>${item.qty}</td>
+      <td>${money(item.price)}</td>
+      <td class="text-end">${money(subtotal)}</td>`;
+    body.appendChild(tr);
+  });
+  if(room.items.length === 0){
+    body.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-3">No items yet</td></tr>`;
+  }
+  document.getElementById('rcTotal').textContent = money(total);
+}
+
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+window.addEventListener('storage', (e) => {
+  if(!e.key) return;
+  if(state.roomCode && e.key === roomKey(state.roomCode)){
+    renderAll();
+  }
+});
+
+boot();
+
+</script>
+</body>
+</html>
